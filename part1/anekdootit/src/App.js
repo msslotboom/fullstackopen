@@ -13,18 +13,27 @@ const App = () => {
    
   const [selected, setSelected] = useState(0)
 
+  const initialpoints = Array(anecdotes.length).fill(0)
+  const [points, setPoints] = useState(initialpoints)
   
+  const newAnecdote = () => {
+    setSelected(Math.floor(Math.random() * (anecdotes.length + 1)))
+    }
   
-  const newAnecdote = () => {setSelected(Math.floor(Math.random() * (anecdotes.length + 1)))
+  const increaseVote = () => {
+    const copy = [...points]
 
-    console.log("selected", selected)
-
+    copy[selected] += 1
+    setPoints(copy)
+    console.log(points)
     }
 
   return (
     <div>
-        {console.log("Anecdote: ", anecdotes[selected])}
-      <Anecdotes anecdote = {anecdotes[selected]}></Anecdotes>
+
+      {console.log(points)}
+      <Anecdotes anecdote = {anecdotes[selected]}></Anecdotes><br></br>
+      <VoteButton increaseVote = {increaseVote}></VoteButton>
       <Button newAnecdote={newAnecdote}></Button>
     </div>
   )
@@ -38,5 +47,12 @@ const Anecdotes = ({anecdote}) =>{
     return(
         <>{anecdote}</>
     )
+    }
+const VoteButton = ({increaseVote}) => {
+  
+  return(
+  <button onClick={increaseVote}>vote</button>
+  )
 }
+
 export default App
