@@ -32,6 +32,7 @@ const App = () => {
       <VoteText point = {points[selected]}></VoteText>
       <VoteButton increaseVote = {increaseVote}></VoteButton>
       <Button newAnecdote={newAnecdote}></Button>
+      <MostVotes anecdote={anecdotes[points.indexOf(Math.max(...points))]} votes = {Math.max(...points)}></MostVotes>
     </div>
   )
 }
@@ -42,7 +43,7 @@ const Button = ({newAnecdote}) => {
 }
 const Anecdotes = ({anecdote}) =>{
     return(
-        <>{anecdote}</>
+        <><h2>Anecdote of the day</h2>{anecdote}</>
     )
 }
 const VoteButton = ({increaseVote}) => {
@@ -54,6 +55,17 @@ const VoteButton = ({increaseVote}) => {
 const VoteText = ({point}) => {
   return(
     <div>has {point} points</div>
+  )
+}
+const MostVotes = ({anecdote, votes}) => {
+  if (votes === 0){
+    return(
+      <div><h2>Anecdotes with most votes</h2>no votes yet</div>
+    )
+  }
+  return(
+    <div><h2>Anecdotes with most votes</h2>
+    {anecdote}<br></br>has {votes} votes</div>
   )
 }
 
