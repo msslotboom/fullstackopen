@@ -2,7 +2,7 @@ const Course = ({course}) =>  {
     return(
         <>
         <h2>{course.name}</h2>
-        
+
             {course.parts.map(course => 
                 <CourseContent key = {course.id} course={course}/>
                 )}
