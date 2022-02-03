@@ -2,18 +2,26 @@ const Course = ({course}) =>  {
     return(
         <>
         <h2>{course.name}</h2>
-        <ul>
+        
             {course.parts.map(course => 
                 <CourseContent key = {course.id} course={course}/>
                 )}
-        </ul>
+        
+        <TotalExercises parts = {course.parts}/>
         </>
     )
 }
 const CourseContent = ({course}) => {
-    console.log(course)
     return(
-        <li>{course.name} {course.exercises}</li>
+        <><div>{course.name} {course.exercises}</div><br></br></>
+    )
+}
+const TotalExercises = ({parts}) => {
+    const total = parts.reduce(function(sum, part){
+        return sum + part.exercises
+    },0)
+    return(
+        <b>Total of  {total} exercises</b>
     )
 }
 export default Course
