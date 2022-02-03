@@ -13,7 +13,7 @@ const Course = ({course}) =>  {
 const CourseContent = ({course}) => {
     console.log(course)
     return(
-        <li>{course.name}</li>
+        <li>{course.name} {course.exercises}</li>
     )
 }
 export default Course
