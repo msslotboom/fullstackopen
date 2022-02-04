@@ -35,6 +35,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter newFilter = {newFilter} setNewFilter = {setNewFilter}/>
+      <h3>Add a new</h3>
       <form onSubmit={addPerson}>
         <div>
           name: <input value = {newName} onChange={handleNameChange}/>
@@ -46,7 +47,7 @@ const App = () => {
           <button type="submit">add</button>
         </div>
       </form>
-      <h2>Numbers</h2>
+      <h3>Numbers</h3>
       <ListNumbers people = {persons} filter = {newFilter}/>
     </div>
   )
