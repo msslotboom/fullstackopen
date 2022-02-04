@@ -31,22 +31,17 @@ const App = () => {
     //console.log(event.target.value)
     setNewNumber(event.target.value)
   }
+  const handleFilterChange = event => {
+    setNewFilter(event.target.value)
+  }
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter newFilter = {newFilter} setNewFilter = {setNewFilter}/>
+      <Filter newFilter = {newFilter} handleFilterChange = {handleFilterChange}/>
       <h3>Add a new</h3>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value = {newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input value = {newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+        <PersonForm addPerson = {addPerson} 
+        newName={newName} handleNameChange= {handleNameChange} 
+        newNumber = {newNumber} handleNumberChange= {handleNumberChange}/>
       <h3>Numbers</h3>
       <ListNumbers people = {persons} filter = {newFilter}/>
     </div>
@@ -68,14 +63,32 @@ const ListNumbers = (props) => {
 
 const Filter = (props) => {
   const newFilter = props.newFilter
-  const setNewFilter = props.setNewFilter
-  const handleFilterChange = (event) =>{
-    setNewFilter(event.target.value)
-  }
+  const handleFilterChange = props.handleFilterChange
   return(
     <div>
     filter shown with <input value = {newFilter} onChange={handleFilterChange}/>
     </div>
   )
 }
+const PersonForm = (props) => {
+  const addPerson = props.addPerson
+  const newName = props.newName
+  const handleNameChange = props.handleNameChange
+  const newNumber = props.newNumber
+  const handleNumberChange = props.handleNumberChange
+  return(
+    <form onSubmit={addPerson}>
+        <div>
+          name: <input value = {newName} onChange={handleNameChange}/>
+        </div>
+        <div>
+          number: <input value = {newNumber} onChange={handleNumberChange}/>
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+    </form>
+  )
+}
+
 export default App
