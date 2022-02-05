@@ -6,15 +6,14 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
-
+  
   useEffect(() => {
     personService.getAll()
     .then(initalPersons => {
       //console.log(initalPersons)
       setPersons(initalPersons)
     })
-  },[])
-
+    },[])
 
 
   const addPerson = (event) => {
@@ -51,7 +50,7 @@ const App = () => {
         newName={newName} handleNameChange= {handleNameChange} 
         newNumber = {newNumber} handleNumberChange= {handleNumberChange}/>
       <h3>Numbers</h3>
-      <ListNumbers people = {persons} filter = {newFilter}/>
+      <ListNumbers people = {persons} filter = {newFilter} setPersons = {setPersons}/>
     </div>
   )
 
@@ -59,12 +58,26 @@ const App = () => {
 const ListNumbers = (props) => {
   const persons = props.people
   const filter = props.filter.toLowerCase()
-  //console.log(filter)
-  //console.log(persons[0].name.toLowerCase().includes('a'))
-  const numbersToShow = persons.filter(person => person.name.toLowerCase().includes(filter))
+  const setPersons = props.setPersons
+
+  const clickHandler = (props) => {
+    console.log(props)
+    const name = props.name
+    const id = props.id
+    console.log(id)
+    if (window.confirm(`Delete ${name} ?`)){
+      console.log('removing')
+      personService.remove(id)
+      setPersons(persons.filter(person =>
+        person.id != id
+        ))
+    }
+  }
+  const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter))
   return(
-    <>{numbersToShow.map(person => 
-    <div key={person.name}>{person.name} {person.number}</div>
+    <>
+    {personsToShow.map(person =>
+    <div key={person.name}>{person.name} {person.number}<button key = {person.name} onClick={() => clickHandler(person)}>delete</button></div>
     )}</>
   )
 }
