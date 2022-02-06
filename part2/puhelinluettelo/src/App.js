@@ -24,25 +24,45 @@ const App = () => {
       name: newName,
       number: newNumber
     }
+    let errorValue = false
+    const index = persons.findIndex(person => {
+      if (person.name === newName){
+        return true
+      }
+    })
     if(persons.some(person => person.name === newName)){
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
         //console.log(persons)
         personObject.id = persons.find(person => person.name === newName).id
         personService.update(personObject.id, personObject)
+        .catch(error => {
+          setNewMessage(
+            [`Note '${personObject.name}' was already removed from server`, false]
+          )
+          errorValue = true
+          //console.log('error happened', errorValue)
+          setTimeout(() => {
+            setNewMessage(null)
+          }, 5000)
+          const newPersons = [...persons]
+          newPersons.splice(index,1)
+          setPersons(newPersons)
+          })
+        
+        
 
-        const index = persons.findIndex(person => {
-          if (person.name === newName){
-            return true
-          }
-        })
-        const personscopy = [...persons]
-        personscopy[index] = personObject
-        setPersons(personscopy)
-        setNewMessage(`Updated ${personObject.name}`)
-        setTimeout(() => {
-          setNewMessage(null)
-          }, 5000
-        )
+        
+        if (errorValue === false){
+          
+          const personscopy = [...persons]
+          personscopy[index] = personObject
+          setPersons(personscopy)
+          setNewMessage([`Updated ${personObject.name}`, true])
+          setTimeout(() => {
+            setNewMessage(null)
+            }, 5000
+          )
+        }
       }
     }
     else{
@@ -54,7 +74,7 @@ const App = () => {
         }
       )
       setPersons(persons.concat(personObject))
-      setNewMessage(`Added ${personObject.name}`)
+      setNewMessage([`Added ${personObject.name}`,true])
       setTimeout(() => {
         setNewMessage(null)
         }, 5000
@@ -104,7 +124,7 @@ const ListNumbers = (props) => {
       setPersons(persons.filter(person =>
         person.id !== id
         ))
-      setNewMessage(`Removed ${name}`)
+      setNewMessage([`Removed ${name}`, true])
       setTimeout(() => {
         setNewMessage(null)
         }, 5000
@@ -153,10 +173,17 @@ const Notification = ({ message }) => {
   if (message === null) {
     return null
   }
+  else if (message[1] === false) {
+    return(
+      <div className="error">
+      {message[0]}
+    </div>
+    )
 
+  }
   return (
     <div className="success">
-      {message}
+      {message[0]}
     </div>
   )
 }
