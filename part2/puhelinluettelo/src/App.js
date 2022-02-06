@@ -22,12 +22,32 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    if (persons.some(person => person.name === newName)){
-      window.alert(`${newName} is already added to phonebook`)
+    if(persons.some(person => person.name === newName)){
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        //console.log(persons)
+        personObject.id = persons.find(person => person.name === newName).id
+        console.log('id',personObject.id)
+        personService.update(personObject.id, personObject)
+
+        const index = persons.findIndex(person => {
+          if (person.name === newName){
+            return true
+          }
+        })
+        const personscopy = [...persons]
+        personscopy[index] = personObject
+        setPersons(personscopy)
+      }
     }
     else{
-    setPersons(persons.concat(personObject))
-    personService.create(personObject)
+      const promiseResult = personService.create(personObject)
+      //const newpersons = personService.getAll
+      promiseResult.then(
+        person => {
+          personObject.id = person.id
+        }
+      )
+      setPersons(persons.concat(personObject))
     }
   }
 
@@ -69,7 +89,7 @@ const ListNumbers = (props) => {
       console.log('removing')
       personService.remove(id)
       setPersons(persons.filter(person =>
-        person.id != id
+        person.id !== id
         ))
     }
   }
