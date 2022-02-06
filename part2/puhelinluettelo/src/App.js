@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [newMessage, setNewMessage] = useState(null)
   
   useEffect(() => {
     personService.getAll()
@@ -26,7 +28,6 @@ const App = () => {
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
         //console.log(persons)
         personObject.id = persons.find(person => person.name === newName).id
-        console.log('id',personObject.id)
         personService.update(personObject.id, personObject)
 
         const index = persons.findIndex(person => {
@@ -37,6 +38,11 @@ const App = () => {
         const personscopy = [...persons]
         personscopy[index] = personObject
         setPersons(personscopy)
+        setNewMessage(`Updated ${personObject.name}`)
+        setTimeout(() => {
+          setNewMessage(null)
+          }, 5000
+        )
       }
     }
     else{
@@ -48,6 +54,11 @@ const App = () => {
         }
       )
       setPersons(persons.concat(personObject))
+      setNewMessage(`Added ${personObject.name}`)
+      setTimeout(() => {
+        setNewMessage(null)
+        }, 5000
+      )
     }
   }
 
@@ -64,13 +75,14 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message = {newMessage}/>
       <Filter newFilter = {newFilter} handleFilterChange = {handleFilterChange}/>
       <h3>Add a new</h3>
         <PersonForm addPerson = {addPerson} 
         newName={newName} handleNameChange= {handleNameChange} 
         newNumber = {newNumber} handleNumberChange= {handleNumberChange}/>
       <h3>Numbers</h3>
-      <ListNumbers people = {persons} filter = {newFilter} setPersons = {setPersons}/>
+      <ListNumbers people = {persons} filter = {newFilter} setPersons = {setPersons} setNewMessage = {setNewMessage}/>
     </div>
   )
 
@@ -79,18 +91,24 @@ const ListNumbers = (props) => {
   const persons = props.people
   const filter = props.filter.toLowerCase()
   const setPersons = props.setPersons
+  const setNewMessage = props.setNewMessage
 
   const clickHandler = (props) => {
-    console.log(props)
+    //console.log(props)
     const name = props.name
     const id = props.id
-    console.log(id)
+    //console.log(id)
     if (window.confirm(`Delete ${name} ?`)){
-      console.log('removing')
+      //console.log('removing')
       personService.remove(id)
       setPersons(persons.filter(person =>
         person.id !== id
         ))
+      setNewMessage(`Removed ${name}`)
+      setTimeout(() => {
+        setNewMessage(null)
+        }, 5000
+      )
     }
   }
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter))
@@ -131,5 +149,15 @@ const PersonForm = (props) => {
     </form>
   )
 }
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
 
+  return (
+    <div className="success">
+      {message}
+    </div>
+  )
+}
 export default App
