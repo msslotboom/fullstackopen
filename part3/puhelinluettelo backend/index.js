@@ -29,6 +29,7 @@ let persons = [
         "id": 5
       }
 ]
+app.use(express.json())
 
 app.get('/api/persons', (req, res) => {
     res.json(persons)
@@ -48,6 +49,28 @@ app.get('/api/persons/:id', (request, response) => {
         response.status(404).end()
     }
 })
+
+app.post('/api/persons', (request, response) => {
+    const person = request.body
+    const generateId =() => {
+      return Math.floor(Math.random()*10000001)
+    }
+    if (!person.name || !person.number){
+      return response.status(400).json({
+        error: "content missing"
+      })
+    }
+    else if (persons.find(person1 => person1.name === person.name)){
+      return response.status(400).json({
+        error:"person already in database"
+      })
+    }
+
+    person.id = generateId()
+    response.json(person)
+    persons = persons.concat(person)
+})
+
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
