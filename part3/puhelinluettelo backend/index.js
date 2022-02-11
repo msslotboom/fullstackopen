@@ -2,6 +2,7 @@ const http = require('http')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
+const cors = require('cors')
 
 let persons = [  
     {
@@ -31,8 +32,14 @@ let persons = [
       }
 ]
 app.use(express.json())
-app.use(morgan())
-morgan('tiny')
+app.use(morgan('tiny'))
+app.use(cors())
+
+//morgan()
+//morgan.token('data', function getData (req){
+//  return JSON.stringify(req.body)
+//})
+
 
 app.get('/api/persons', (req, res) => {
     res.json(persons)
@@ -54,6 +61,7 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
+    //morgan(':method :url :response-time ms :data')
     const person = request.body
     const generateId =() => {
       return Math.floor(Math.random()*10000001)
