@@ -34,7 +34,7 @@ let persons = [
 app.use(express.json())
 app.use(morgan('tiny'))
 app.use(cors())
-
+app.use(express.static('build'))
 //morgan()
 //morgan.token('data', function getData (req){
 //  return JSON.stringify(req.body)
@@ -49,6 +49,8 @@ app.get('/info', (req, res) => {
     ${new Date()}
     </div>`)
 })
+
+
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     const note = persons.find(person => person.id === id)
