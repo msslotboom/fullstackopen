@@ -1,9 +1,9 @@
-const http = require('http')
+//const http = require('http')
 const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
-const mongoose = require('mongoose')
+//const mongoose = require('mongoose')
 require('dotenv').config()
 const Person = require('./models/person')
 
@@ -22,28 +22,28 @@ app.get('/api/persons', (req, res) => {
 
 
 app.post('/api/persons', (request, response,next) => {
-    //morgan(':method :url :response-time ms :data')
-    const body = request.body
-    if (body.name === undefined|| body.name === '') {
-      return response.status(400).json({ error: 'content missing' })
-    }
-    const person = new Person({
-      name: body.name,
-      number: body.number
-    })
-    person.save().then(savedPerson => {
-      response.json(savedPerson)
-    })
+  //morgan(':method :url :response-time ms :data')
+  const body = request.body
+  if (body.name === undefined|| body.name === '') {
+    return response.status(400).json({ error: 'content missing' })
+  }
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
     .catch(error => next(error))
 })
 
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
-  .then(result => {
-    response.status(204).end()
-  })
-  .catch(error => next(error))
+    .then(
+      response.status(204).end()
+    )
+    .catch(error => next(error))
 })
 
 
