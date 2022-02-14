@@ -32,7 +32,6 @@ const App = () => {
     })
     if(persons.some(person => person.name === newName)){
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
-        //console.log(persons)
         personObject.id = persons.find(person => person.name === newName).id
         personService.update(personObject.id, personObject)
         .catch(error => {
@@ -40,7 +39,6 @@ const App = () => {
             [`Note '${personObject.name}' was already removed from server`, false]
           )
           errorValue = true
-          //console.log('error happened', errorValue)
           setTimeout(() => {
             setNewMessage(null)
           }, 5000)
@@ -67,18 +65,32 @@ const App = () => {
     }
     else{
       const promiseResult = personService.create(personObject)
-      //const newpersons = personService.getAll
       promiseResult.then(
         person => {
           personObject.id = person.id
-        }
-      )
-      setPersons(persons.concat(personObject))
-      setNewMessage([`Added ${personObject.name}`,true])
-      setTimeout(() => {
-        setNewMessage(null)
+        },
+        setPersons(persons.concat(personObject)),
+        setNewMessage([`Added ${personObject.name}`,true]),
+
+        //console.log('fail :('),
+        setTimeout(() => {
+          setNewMessage(null)
         }, 5000
       )
+      )
+      .catch(error => {
+        //console.log('äää')
+        console.log(error.response.data)
+        setNewMessage([error.response.data.error,false])
+        setPersons(persons.filter(person => person !== personObject))
+        setTimeout(() => {
+          setNewMessage(null)
+        }, 5000
+        )
+        return
+      })
+
+      
     }
   }
 
