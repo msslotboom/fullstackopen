@@ -7,33 +7,6 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 const Person = require('./models/person')
 
-// let persons = [  
-//     {
-//         "name": "Arto Hellas",
-//         "number": "040-123456",
-//         "id": 1
-//       },
-//       {
-//         "name": "Ada Lovelace",
-//         "number": "39-44-5323523",
-//         "id": 2
-//       },
-//       {
-//         "name": "Dan Abramov",
-//         "number": "12-43-234345",
-//         "id": 3
-//       },
-//       {
-//         "name": "Mary Poppendieck",
-//         "number": "39-23-6423122",
-//         "id": 4
-//       },
-//       {
-//         "name": "test",
-//         "number": "3",
-//         "id": 5
-//       }
-// ]
 
 
 app.use(express.json())
@@ -47,55 +20,47 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-// app.get('/info', (req, res) => {
-//     res.send(`<div>Phonebook has info for ${persons.length} people<br/>
-//     ${new Date()}
-//     </div>`)
-// })
-
-
-// app.get('/api/persons/:id', (request, response) => {
-//   Person.find({}).then(notes => {
-//     response.json(notes)
-//   })
-//   const id = Number(request.params.id)
-//   const note = persons.find(person => person.id === id)
-//   if (note){
-//       response.json(note)
-//   }
-//   else{
-//       response.status(404).end()
-//   }
-// })
 
 app.post('/api/persons', (request, response) => {
     //morgan(':method :url :response-time ms :data')
     const body = request.body
-    console.log(body.name)
-    if (body.name === undefined) {
-      console.log('fail')
+    if (body.name === undefined|| body.name === '') {
       return response.status(400).json({ error: 'content missing' })
     }
-    console.log('aaa')
     const person = new Person({
       name: body.name,
       number: body.number
     })
-    console.log('test')
-    console.log(person)
     person.save().then(savedPerson => {
-      console.log(person)
       response.json(savedPerson)
     })
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+
+app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
   .then(result => {
     response.status(204).end()
   })
   .catch(error => next(error))
 })
+
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
