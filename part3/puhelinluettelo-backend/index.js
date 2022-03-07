@@ -1,6 +1,7 @@
 //const http = require('http')
 const express = require('express')
 const morgan = require('morgan')
+//onst postmorgan = require('morgan')
 const app = express()
 const cors = require('cors')
 //const mongoose = require('mongoose')
@@ -10,9 +11,12 @@ const Person = require('./models/person')
 
 
 app.use(express.json())
+//app.use(morgan('tiny'))
 app.use(morgan('tiny'))
 app.use(cors())
 app.use(express.static('build'))
+
+
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(notes => {
@@ -22,6 +26,7 @@ app.get('/api/persons', (req, res) => {
 
 
 app.post('/api/persons', (request, response,next) => {
+  //morgan.token(':method :url :status :res[content-length] - :response-time ms :data')
   //morgan(':method :url :response-time ms :data')
   const body = request.body
   if (body.name === undefined|| body.name === '') {
@@ -37,6 +42,17 @@ app.post('/api/persons', (request, response,next) => {
     .catch(error => next(error))
 })
 
+app.put('/api/persons/:id', (request,response,next) => {
+  Person.findByIdAndUpdate(
+    { _id: request.params.id },
+    { number: request.body.number
+    }
+  )
+    .then(
+      response.status(200).end()
+    )
+    .catch(error => next(error))
+})
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
