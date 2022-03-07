@@ -24,6 +24,20 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
+app.get('/api/persons/:id', (request, response,next) => {
+  console.log('test2')
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        console.log(person)
+        response.json(person)
+      } else {
+        console.log('test')
+        response.status(404).end()
+      }
+    }).catch(error => next(error))
+})
+
 
 app.post('/api/persons', (request, response,next) => {
   //morgan.token(':method :url :status :res[content-length] - :response-time ms :data')
