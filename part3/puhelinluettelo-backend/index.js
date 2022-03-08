@@ -13,6 +13,9 @@ app.use(cors())
 app.use(express.static('build'))
 
 morgan.token('data', function getData (req){
+  if (Object.keys(req.body).length === 0){
+    return
+  }
   return JSON.stringify(req.body)
 })
 
