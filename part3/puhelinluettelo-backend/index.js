@@ -1,22 +1,20 @@
-//const http = require('http')
 const express = require('express')
 const morgan = require('morgan')
-//onst postmorgan = require('morgan')
 const app = express()
 const cors = require('cors')
-//const mongoose = require('mongoose')
 require('dotenv').config()
 const Person = require('./models/person')
 
 
 
 app.use(express.json())
-//app.use(morgan('tiny'))
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 app.use(cors())
 app.use(express.static('build'))
 
-
+morgan.token('data', function getData (req){
+  return JSON.stringify(req.body)
+})
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(notes => {
@@ -40,8 +38,6 @@ app.get('/api/persons/:id', (request, response,next) => {
 
 
 app.post('/api/persons', (request, response,next) => {
-  //morgan.token(':method :url :status :res[content-length] - :response-time ms :data')
-  //morgan(':method :url :response-time ms :data')
   const body = request.body
   if (body.name === undefined|| body.name === '') {
     return response.status(400).json({ error: 'content missing' })
