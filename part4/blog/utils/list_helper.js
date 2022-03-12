@@ -22,6 +22,24 @@ const totalLikes = (blogs) => {
     }
 }
 
+const favouriteBlog = (blogs) => {
+    if (Array.isArray(blogs) || blogs.likes !== undefined){
+        favourite = blogs.reduce((fav, blog) => {
+            //console.log(fav.likes,blog.likes)
+            if (blog.likes > fav.likes){
+                return blog
+            }
+            else{
+                return fav
+            }
+        },{'likes': -1})
+        return favourite
+    }
+    else{
+        return 0
+    }
+}
+
 module.exports = {
-dummy, totalLikes
+dummy, totalLikes, favouriteBlog
 }
