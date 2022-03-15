@@ -40,6 +40,20 @@ test('id field has name id', async () => {
     }
 })
 
+test('test post function', async () => {
+    const newBlog = {
+        title: 'A new blog post',
+        author: 'Mikael',
+        url: '/newpost',
+        likes: 0
+    }
+    const baseBlogs = await api.get('/api/blogs')
+    const post =  await api.post('/api/blogs').send(newBlog)
+    const newBlogs = await api.get('/api/blogs')
+    expect(newBlogs.body.length - baseBlogs.body.length).toBe(1)
+    expect(newBlogs.body.includes(newBlog))
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
