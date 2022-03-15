@@ -54,6 +54,19 @@ test('test post function', async () => {
     expect(newBlogs.body.includes(newBlog))
 })
 
+test('No like in post request creates likes = 0 in the db', async () => {
+    const newBlog = {
+        title: 'blog with no like field',
+        author: 'Mikael',
+        url: '/nolikes'
+    }
+    const post =  await api.post('/api/blogs').send(newBlog)
+    const newBlogs = await api.get('/api/blogs')
+    const newBlogFromDb =  newBlogs.body.find(blog => blog.url === '/nolikes')
+    console.log(newBlogFromDb)
+    expect(newBlogFromDb.likes).toBe(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
