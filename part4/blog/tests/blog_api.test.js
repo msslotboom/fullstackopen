@@ -78,7 +78,7 @@ test('400 Bad Request if no title or url', async () => {
 test('Test deleting a blog', async () => {
     const blogs = await api.get('/api/blogs')
     const testblog = await blogs.body.find(blog => blog.title === 'TestBlog')
-    await api.delete(`/api/blogs/${testblog.id}`).send(testblog.id)
+    await api.delete(`/api/blogs/${testblog.id}`)
     const updatedBlogs = await api.get('/api/blogs')
     const newTestBlog = updatedBlogs.body.find(blog => blog.title === 'TestBlog')
     expect(newTestBlog).toBe(undefined)
