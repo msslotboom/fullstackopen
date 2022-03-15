@@ -12,7 +12,6 @@ blogsRouter.post('/', (request, response) => {
     blog.likes = 0
   }
   if (blog.title === undefined && blog.url === undefined){
-    console.log('test')
     response.status(400)
   }
   else{
@@ -23,6 +22,11 @@ blogsRouter.post('/', (request, response) => {
         response.status(201).json(result)
       })
   }
+})
+
+blogsRouter.delete('/:id', async (request,response) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
 })
 
 module.exports = blogsRouter

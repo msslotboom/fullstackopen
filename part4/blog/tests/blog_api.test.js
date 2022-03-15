@@ -63,7 +63,6 @@ test('No like in post request creates likes = 0 in the db', async () => {
     const post =  await api.post('/api/blogs').send(newBlog)
     const newBlogs = await api.get('/api/blogs')
     const newBlogFromDb =  newBlogs.body.find(blog => blog.url === '/nolikes')
-    console.log(newBlogFromDb)
     expect(newBlogFromDb.likes).toBe(0)
 })
 
@@ -75,6 +74,16 @@ test('400 Bad Request if no title or url', async () => {
         .send(newBlog)
         .expect(400)
 })
+
+test('Test deleting a blog', async () => {
+    const blogs = await api.get('/api/blogs')
+    const testblog = await blogs.body.find(blog => blog.title === 'TestBlog')
+    await api.delete(`/api/blogs/${testblog.id}`).send(testblog.id)
+    const updatedBlogs = await api.get('/api/blogs')
+    const newTestBlog = updatedBlogs.body.find(blog => blog.title === 'TestBlog')
+    expect(newTestBlog).toBe(undefined)
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
