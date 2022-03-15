@@ -67,6 +67,15 @@ test('No like in post request creates likes = 0 in the db', async () => {
     expect(newBlogFromDb.likes).toBe(0)
 })
 
+test('400 Bad Request if no title or url', async () => {
+    const newBlog = {
+        author: 'Mikael'
+    }
+    post = api.post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
