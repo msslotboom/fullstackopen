@@ -84,6 +84,16 @@ test('Test deleting a blog', async () => {
     expect(newTestBlog).toBe(undefined)
 })
 
+test('Test updating a blog', async () => {
+    const blogs = await api.get('/api/blogs')
+    const testblog = await blogs.body.find(blog => blog.title === 'TestBlog')
+    originalLikes = testblog.likes
+    testblog.likes = testblog.likes + 1
+    response = await api.put(`/api/blogs/${testblog.id}`).send(testblog)
+    const newBlogContent = response.body
+    expect(newBlogContent.likes).toBe(originalLikes +1)
+})
+
 
 afterAll(() => {
   mongoose.connection.close()
