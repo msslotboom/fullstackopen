@@ -45,7 +45,8 @@ test('test post function', async () => {
         title: 'A new blog post',
         author: 'Mikael',
         url: '/newpost',
-        likes: 0
+        likes: 0,
+        userId: '62fbac956cd5c2b994e867af'
     }
     const baseBlogs = await api.get('/api/blogs')
     const post =  await api.post('/api/blogs').send(newBlog)
