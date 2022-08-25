@@ -1,3 +1,4 @@
 /node_modules
 .env
 /requests/login.rest
+/requests/remove_blog_post.rest
