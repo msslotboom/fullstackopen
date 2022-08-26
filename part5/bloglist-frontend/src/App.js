@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './index.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [message, setNewMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -49,12 +51,37 @@ const App = () => {
     } 
     catch (exception) {   
       console.log('wrong credentials')
+      setNewMessage([`wrong username or password`, false])
+      setTimeout(() => {
+        setNewMessage(null)
+        }, 5000
+      )
+
     }
   }
 
   const LogoutButton = () => {
     return(
-      <button onClick = {() => logoutHandler()}>Logout</button>
+      <button key = "lougout" onClick = {() => logoutHandler()}>Logout</button>
+    )
+  }
+
+  const Notification = () => {
+    if (message === null) {
+      return null
+    }
+    else if (message[1] === false) {
+      return(
+        <div key = {message[1]} className="error">
+        {message[0]}
+      </div>
+      )
+  
+    }
+    return (
+      <div key = {message[1]} className="success">
+        {message[0]}
+      </div>
     )
   }
 
@@ -65,15 +92,21 @@ const App = () => {
       author: author,
       url: url
     }
-    console.log(blogObject)
     blogService.create(blogObject)
-    setBlogs(blogs.concat(blogObject))
+    //setBlogs(blogs.concat(blogObject))
+    console.log(blogObject.title, blogObject.author)
+    setNewMessage([`a new blog ${blogObject.title} by ${blogObject.author} added`], true)
+      setTimeout(() => {
+        setNewMessage(null)
+        }, 5000
+      )
   }
 
   if (user === null) {
     return (
       <div>
         <h2>Login</h2>
+        <Notification/>
         <form onSubmit={handleLogin}> 
         <div>
             username
@@ -106,6 +139,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification/>
       <div value>{user.name} logged in</div>
       <LogoutButton/>
       <h2>Create new</h2>
