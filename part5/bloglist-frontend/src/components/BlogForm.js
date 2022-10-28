@@ -1,13 +1,11 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const BlogForm = ({addBlog, setNewMessage}) => {
+const BlogForm = ({blogs, setBlogs, setNewMessage, BlogFormRef}) => {
   
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-
-  const BlogFormRef = useRef()
 
   const postBlog = (event) => {
     event.preventDefault()
@@ -17,7 +15,8 @@ const BlogForm = ({addBlog, setNewMessage}) => {
       url: url
     }
     blogService.create(blogObject)
-    addBlog(blogObject)
+    setBlogs(blogs.concat(blogObject))
+    BlogFormRef.current.toggleVisibility()
     console.log(blogObject.title, blogObject.author)
     setNewMessage([`a new blog ${blogObject.title} by ${blogObject.author} added`], true)
       setTimeout(() => {

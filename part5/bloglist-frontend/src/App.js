@@ -68,7 +68,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [message, setNewMessage] = useState(null)
-  //const [newBlogVisible, setNewBlogVisible] = useState(false)
+  const BlogFormRef = useRef()
 
 
   useEffect(() => {
@@ -117,35 +117,6 @@ const App = () => {
     }
   }
 
-
-  const BlogFormRef = useRef()
-
-  const addBlog = (blog) => {
-    setBlogs(blogs.concat(blog))
-    BlogFormRef.current.toggleVisibility()
-  }
-
-
-  // const blogForm = () => {
-  //   const hideWhenVisible = { display: newBlogVisible ? 'none' : '' }
-  //   const showWhenVisible = { display: newBlogVisible ? '' : 'none' }
-  //   return (
-  //     <div>
-  //       <div style={hideWhenVisible}>
-  //         <button onClick={() => setNewBlogVisible(true)}>log in</button>
-  //       </div>
-  //       <div style={showWhenVisible}>
-  //           <BlogForm
-  //           setNewMessage = {setNewMessage}
-  //           blogs = {blogs}
-  //           setBlogs = {setBlogs}
-  //           />
-  //         <button onClick={() => setNewBlogVisible(false)}>cancel</button>
-  //       </div>
-  //     </div>
-  //   )
-  // }
-  
   const LogoutButton = () => {
     return(
       <button key = "lougout" onClick = {() => logoutHandler()}>Logout</button>
@@ -183,9 +154,12 @@ const App = () => {
       </Togglable> */}
 
       <Togglable buttonLabel="new note" ref={BlogFormRef}>
-      <BlogForm 
-      addBlog = {addBlog} 
-      setNewMessage={setNewMessage}/>
+      <BlogForm
+      blogs = {blogs} 
+      setBlogs = {setBlogs} 
+      setNewMessage={setNewMessage}
+      BlogFormRef = {BlogFormRef}
+      />
       </Togglable>
 
       <br/>
