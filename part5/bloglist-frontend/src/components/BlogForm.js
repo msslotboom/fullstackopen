@@ -12,7 +12,8 @@ const BlogForm = ({blogs, setBlogs, setNewMessage, BlogFormRef}) => {
     const blogObject = {
       title: title,
       author: author,
-      url: url
+      url: url,
+      likes: 0
     }
     blogService.create(blogObject)
     setBlogs(blogs.concat(blogObject))

@@ -22,6 +22,11 @@ const Blog = ({blog, allBlogs, setBlogs}) => {
   }
 
   const increaseLike = (blog) => {
+    
+    if (isNaN(blog.likes)) {
+      blog.likes = 0
+    }
+
     const blogObject = {
       title: blog.title,
       id: blog.id,
@@ -30,7 +35,7 @@ const Blog = ({blog, allBlogs, setBlogs}) => {
       likes: blog.likes + 1
     }
     blogService.update(blogObject.id, blogObject)
-
+    console.log(blogObject)
     const index = allBlogs.findIndex(x => {
       if (x.id === blogObject.id){
         return true
