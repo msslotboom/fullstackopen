@@ -1,5 +1,4 @@
 import {useState} from 'react'
-import blogs from '../services/blogs'
 import blogService from '../services/blogs'
 
 const Blog = ({blog, allBlogs, setBlogs}) => {
@@ -19,6 +18,15 @@ const Blog = ({blog, allBlogs, setBlogs}) => {
 
   const toggleVisibility = () => {
     setVisible(!visible)
+  }
+
+  const deleteBlog = (blog) => {
+    if (window.confirm("Remove blog " +  blog.title + " by " + blog.author + "?")) {
+      blogService.remove(blog.id)
+
+      const newBlogs = allBlogs.filter(blogs => blogs.id !== blog.id)
+      setBlogs(newBlogs)
+    }
   }
 
   const increaseLike = (blog) => {
@@ -57,7 +65,8 @@ const Blog = ({blog, allBlogs, setBlogs}) => {
       {blog.title}  <button onClick={toggleVisibility}>Hide</button><br/>
       {blog.url}<br/>
       likes {blog.likes} <button onClick={ () => increaseLike(blog)}>like</button><br/>
-      {blog.author}
+      {blog.author}<br/>
+      <button onClick = { () => deleteBlog(blog)}>remove</button>
     </div>
     
   </div>  
