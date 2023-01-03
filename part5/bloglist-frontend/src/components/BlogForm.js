@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types';
 
 const BlogForm = ({blogs, setBlogs, setNewMessage, BlogFormRef}) => {
   
@@ -18,7 +19,6 @@ const BlogForm = ({blogs, setBlogs, setNewMessage, BlogFormRef}) => {
     blogService.create(blogObject)
     setBlogs(blogs.concat(blogObject))
     BlogFormRef.current.toggleVisibility()
-    console.log(blogObject.title, blogObject.author)
     setNewMessage([`a new blog ${blogObject.title} by ${blogObject.author} added`], true)
       setTimeout(() => {
         setNewMessage(null)
@@ -63,6 +63,13 @@ const BlogForm = ({blogs, setBlogs, setNewMessage, BlogFormRef}) => {
           </form>
     </div>
   )
+}
+
+BlogForm.propTypes = {
+  blogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func.isRequired,
+  setNewMessage: PropTypes.func.isRequired,
+  BlogFormRef: PropTypes.object.isRequired
 }
 
 export default BlogForm
