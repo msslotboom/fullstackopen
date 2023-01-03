@@ -6,15 +6,15 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import './index.css'
 
-const Notification = ({message}) => {
+const Notification = ({ message }) => {
   if (message === null) {
     return null
   }
   else if (message[1] === false) {
     return(
       <div key = {message[1]} className="error">
-      {message[0]}
-    </div>
+        {message[0]}
+      </div>
     )
 
   }
@@ -26,39 +26,39 @@ const Notification = ({message}) => {
 }
 
 const LoginForm = (
-    {handleLogin,
+  { handleLogin,
     handleUsernameChange,
     handlePasswordChange,
     username,
-    password}
-  ) => {
-    return(
-      <div>
-        <h2>Login</h2>
-        <form onSubmit={handleLogin}> 
+    password }
+) => {
+  return(
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
         <div>
             username
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={handleUsernameChange}
-            />
-          </div>
-          <div>
+          <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={handleUsernameChange}
+          />
+        </div>
+        <div>
             password
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={handlePasswordChange}          
-            />        
-          </div>
-          <button type="submit">login</button>
-        </form>
-      </div>
-    )
-  }
+          <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={handlePasswordChange}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </div>
+  )
+}
 
 
 
@@ -77,13 +77,13 @@ const App = () => {
     )
   }, [])
 
-  useEffect(() => {    
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')    
-    if (loggedUserJSON) {      
-      const user = JSON.parse(loggedUserJSON)      
-      setUser(user)      
-      blogService.setToken(user.token)    
-    }  
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
   }, [])
 
   const logoutHandler = () => {
@@ -93,25 +93,25 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-  
+
     try {
       const user = await loginService.login({
-        username, password,      
+        username, password,
       })
-      window.localStorage.setItem(        
-        'loggedNoteappUser', JSON.stringify(user)      
-      ) 
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      )
       setUser(user)
       setUsername('')
-      setPassword('')    
+      setPassword('')
       blogService.setToken(user.token)
-    } 
-    catch (exception) {   
+    }
+    catch (exception) {
       console.log('wrong credentials')
-      setNewMessage([`wrong username or password`, false])
+      setNewMessage(['wrong username or password', false])
       setTimeout(() => {
         setNewMessage(null)
-        }, 5000
+      }, 5000
       )
 
     }
@@ -123,20 +123,20 @@ const App = () => {
     )
   }
 
-  
+
 
   if (user === null) {
     return (
       <div>
         <Notification
-        message = {message}
+          message = {message}
         />
         <LoginForm
-        username={username}
-        password={password}
-        handleUsernameChange={({ target }) => setUsername(target.value)}
-        handlePasswordChange={({ target }) => setPassword(target.value)}
-        handleLogin={handleLogin}/>
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleLogin={handleLogin}/>
       </div>
     )
   }
@@ -145,26 +145,26 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification
-      message = {message}
+        message = {message}
       />
       <div value>{user.name} logged in <LogoutButton/></div>
 
       <Togglable buttonLabel="new note" ref={BlogFormRef}>
-      <BlogForm 
-      blogs = {blogs} 
-      setBlogs = {setBlogs} 
-      setNewMessage={setNewMessage}
-      BlogFormRef = {BlogFormRef}
-      />
+        <BlogForm
+          blogs = {blogs}
+          setBlogs = {setBlogs}
+          setNewMessage={setNewMessage}
+          BlogFormRef = {BlogFormRef}
+        />
       </Togglable>
 
       <br/>
       {blogs.sort((a,b) => b.likes - a.likes).map(blog =>
-      <Blog
-      key={blog.id}
-      blog={blog}
-      setBlogs = {setBlogs}
-      allBlogs = {blogs}/>
+        <Blog
+          key={blog.id}
+          blog={blog}
+          setBlogs = {setBlogs}
+          allBlogs = {blogs}/>
       )}
     </div>
   )

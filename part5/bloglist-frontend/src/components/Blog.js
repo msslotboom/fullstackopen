@@ -1,7 +1,7 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({blog, allBlogs, setBlogs}) => {
+const Blog = ({ blog, allBlogs, setBlogs }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -21,7 +21,7 @@ const Blog = ({blog, allBlogs, setBlogs}) => {
   }
 
   const deleteBlog = (blog) => {
-    if (window.confirm("Remove blog " +  blog.title + " by " + blog.author + "?")) {
+    if (window.confirm('Remove blog ' +  blog.title + ' by ' + blog.author + '?')) {
       blogService.remove(blog.id)
 
       const newBlogs = allBlogs.filter(blogs => blogs.id !== blog.id)
@@ -30,7 +30,7 @@ const Blog = ({blog, allBlogs, setBlogs}) => {
   }
 
   const increaseLike = (blog) => {
-    
+
     if (isNaN(blog.likes)) {
       blog.likes = 0
     }
@@ -52,24 +52,24 @@ const Blog = ({blog, allBlogs, setBlogs}) => {
     const newBlogs = [...allBlogs]
     newBlogs[index] = blogObject
     setBlogs(newBlogs)
-    
+
   }
 
   return(
-  <div key = {blog.id} style = {blogStyle}>
-    <div style = {hideWhenVisible}>
-      {blog.title} <button onClick={toggleVisibility}>View</button>
-    </div>
+    <div key = {blog.id} style = {blogStyle}>
+      <div style = {hideWhenVisible}>
+        {blog.title} <button onClick={toggleVisibility}>View</button>
+      </div>
 
-    <div style = {showWhenVisible}>
-      {blog.title}  <button onClick={toggleVisibility}>Hide</button><br/>
-      {blog.url}<br/>
+      <div style = {showWhenVisible}>
+        {blog.title}  <button onClick={toggleVisibility}>Hide</button><br/>
+        {blog.url}<br/>
       likes {blog.likes} <button onClick={ () => increaseLike(blog)}>like</button><br/>
-      {blog.author}<br/>
-      <button onClick = { () => deleteBlog(blog)}>remove</button>
+        {blog.author}<br/>
+        <button onClick = { () => deleteBlog(blog)}>remove</button>
+      </div>
+
     </div>
-    
-  </div>  
   )
 }
 
