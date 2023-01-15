@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react'
 import Blog from './Blog'
 
 
-test('renders content', () => {
+test('renders title', () => {
   const blogObject = {
     title: 'test blog',
     id: 1,
@@ -13,13 +13,10 @@ test('renders content', () => {
     likes: 1
   }
 
-  const { container } = render(<Blog blog={blogObject} />)
+  render(<Blog blog={blogObject} />)
 
-  screen.debug(container)
+  const element = screen.getByText('test blog')
 
-  const div = container.querySelector('.blog')
-  expect(div).toHaveTextContent(
-    'test blog'
-  )
+  expect(element).toBeDefined()
 
 })
