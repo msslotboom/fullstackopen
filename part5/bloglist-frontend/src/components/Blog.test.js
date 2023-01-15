@@ -24,3 +24,21 @@ test('renders title', () => {
 
 })
 
+test('renders likes, url, user if button pressed', async () => {
+  const blogObject = {
+    title: 'test blog',
+    id: 1,
+    author: 'dev',
+    url: 'testurl',
+    likes: 1
+  }
+  const user = userEvent.setup()
+  const { container } = render(<Blog blog={blogObject} />)
+  const button = screen.getByText('View')
+  await user.click(button)
+
+  // screen.debug()
+  expect(container).toHaveTextContent('dev')
+  expect(container).toHaveTextContent('testurl')
+  expect(container).toHaveTextContent('1')
+})
