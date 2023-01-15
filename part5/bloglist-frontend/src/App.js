@@ -91,6 +91,31 @@ const App = () => {
     setUser(null)
   }
 
+  const increaseLikeHandler = (blog) => {
+    if (isNaN(blog.likes)) {
+      blog.likes = 0
+    }
+
+    const blogObject = {
+      title: blog.title,
+      id: blog.id,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1
+    }
+    blogService.update(blogObject.id, blogObject)
+    console.log(blogObject)
+    const index = blogs.findIndex(x => {
+      if (x.id === blogObject.id){
+        return true
+      }
+    })
+    const newBlogs = [...blogs]
+    newBlogs[index] = blogObject
+    setBlogs(newBlogs)
+
+  }
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -164,7 +189,9 @@ const App = () => {
           key={blog.id}
           blog={blog}
           setBlogs = {setBlogs}
-          allBlogs = {blogs}/>
+          allBlogs = {blogs}
+          handleLikeIncrease = {increaseLikeHandler}
+        />
       )}
     </div>
   )

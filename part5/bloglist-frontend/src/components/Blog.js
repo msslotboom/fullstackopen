@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, allBlogs, setBlogs }) => {
+const Blog = ({ blog, allBlogs, setBlogs, handleLikeIncrease }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -29,32 +29,6 @@ const Blog = ({ blog, allBlogs, setBlogs }) => {
     }
   }
 
-  const increaseLike = (blog) => {
-
-    if (isNaN(blog.likes)) {
-      blog.likes = 0
-    }
-
-    const blogObject = {
-      title: blog.title,
-      id: blog.id,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1
-    }
-    blogService.update(blogObject.id, blogObject)
-    console.log(blogObject)
-    const index = allBlogs.findIndex(x => {
-      if (x.id === blogObject.id){
-        return true
-      }
-    })
-    const newBlogs = [...allBlogs]
-    newBlogs[index] = blogObject
-    setBlogs(newBlogs)
-
-  }
-
   return(
     <div key = {blog.id} style = {blogStyle}>
       <div style = {hideWhenVisible}>
@@ -64,7 +38,7 @@ const Blog = ({ blog, allBlogs, setBlogs }) => {
       <div style = {showWhenVisible}>
         {blog.title}  <button onClick={toggleVisibility}>Hide</button><br/>
         {blog.url}<br/>
-      likes {blog.likes} <button onClick={ () => increaseLike(blog)}>like</button><br/>
+      likes {blog.likes} <button onClick={ () => handleLikeIncrease(blog)}>like</button><br/>
         {blog.author}<br/>
         <button onClick = { () => deleteBlog(blog)}>remove</button>
       </div>
