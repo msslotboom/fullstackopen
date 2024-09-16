@@ -9,7 +9,11 @@ const AnecdoteList = () => {
 		dispatch(voteForAnecdote(id))
 	}
 
-	const anecdotes = useSelector(state => state)
+	const anecdotes = useSelector(state => {
+		const filteredAnecdotes = state.anecdotes.filter(anecdote => anecdote.content.includes(state.filter))
+		return filteredAnecdotes
+	})
+
 	return (
 		<>
 		{anecdotes.sort((firstAnecdote, secondAnecdote) => secondAnecdote.votes - firstAnecdote.votes).map(anecdote =>
