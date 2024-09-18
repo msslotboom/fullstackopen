@@ -8,7 +8,6 @@ import anecdoteService from './services/anecdotes'
 import { setAnecdotes } from './reducers/anecdoteReducer'
 
 const App = () => {
-  const dispatch = useDispatch()
   anecdoteService.getAll().then(anecdotes =>
     store.dispatch(setAnecdotes(anecdotes)))
 
