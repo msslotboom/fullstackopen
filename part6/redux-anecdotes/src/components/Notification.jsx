@@ -15,17 +15,15 @@ const Notification = () => {
   const [showNotification, setShowNotification] = useState(false)
 
   useEffect(() => {
-    if (notification !== '') {
-      setShowNotification(true)
-    }
-    const timer = setTimeout(() => {
+    setShowNotification(true)
+    setTimeout(() => {
       setShowNotification(false)
-    }, 5000)
+    }, notification.time*1000)
   }, [notification])
 
   return (
     <>
-      {showNotification && (<div style={style}>{notification}</div>)}
+      {showNotification && (<div style={style}>{notification.content}</div>)}
     </>
     
   )
