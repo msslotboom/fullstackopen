@@ -7,7 +7,7 @@ export const getAnecdotes = () =>
 
 export const createAnecdote = newAnecdote => {
 	if (newAnecdote.content.length < 5){
-		return 'Anecdote must be over 5 characters long'
+		throw new Error("anecdote needs at least 5 characters!")
 	}
 	else{
 		return axios.post(baseUrl, newAnecdote).then(res => {res.data})
