@@ -11,3 +11,8 @@ export const createAnecdote = newAnecdote => {
 		}
 		console.log("Anecdote must be at least 5 characters long!")
 	}
+
+export const updateAnecdote = newAnecdote => {
+	const id = newAnecdote.id
+	axios.put(`${ baseUrl }/${id}`, newAnecdote).then(res => res.data)
+}
