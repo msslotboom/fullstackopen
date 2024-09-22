@@ -6,13 +6,16 @@ export const getAnecdotes = () =>
 	axios.get(baseUrl).then(res => res.data)
 
 export const createAnecdote = newAnecdote => {
-		if(newAnecdote.content.length >= 5) {
-			axios.post(baseUrl, newAnecdote).then(res => res.data)
-		}
-		console.log("Anecdote must be at least 5 characters long!")
+	if (newAnecdote.content.length < 5){
+		return 'Anecdote must be over 5 characters long'
 	}
+	else{
+		return axios.post(baseUrl, newAnecdote).then(res => {res.data})
+	}
+}
+
 
 export const updateAnecdote = newAnecdote => {
 	const id = newAnecdote.id
-	axios.put(`${ baseUrl }/${id}`, newAnecdote).then(res => res.data)
+	return axios.put(`${ baseUrl }/${id}`, newAnecdote).then(res => res.data)
 }
